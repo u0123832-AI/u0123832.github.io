@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>豐芝淳七脈輪身心靈SPA | 淨化能量 · 釋放壓力 · 啟動自我療癒</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif; 
+      background: #f9f7f3; 
+      color: #31403d; 
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    
+    /* Hero Section */
+    .hero { 
+      background: linear-gradient(135deg, #9be7d6 0%, #b5e8dd 50%, #ffd6e0 100%);
+      padding: 4em 1.5em 5em 1.5em; 
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -5%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(155,231,214,0.3) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: float 8s ease-in-out infinite reverse;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    .hero-content { position: relative; z-index: 1; }
+    h1 { 
+      font-size: 3em; 
+      letter-spacing: 3px; 
+      margin-bottom: 0.3em;
+      color: #2d3a36;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .tagline { 
+      font-size: 1.3em; 
+      color: #5a6c66; 
+      margin-bottom: 1.5em;
+      font-weight: 300;
+    }
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #1B998B, #2dbbaa);
+      color: white;
+      padding: 1em 3em;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 1.1em;
+      font-weight: 500;
+      box-shadow: 0 8px 20px rgba(27,153,139,0.3);
+      transition: all 0.3s ease;
+      margin-top: 1em;
+    }
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(27,153,139,0.4);
+    }
+
+    /* Container */
+    .container { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 0 1.5em;
+    }
+
+    /* Section Styles */
+    section { 
+      padding: 4em 0;
+    }
+    .section-title {
+      text-align: center;
+      font-size: 2.2em;
+      margin-bottom: 0.5em;
+      color: #2d3a36;
+      position: relative;
+      padding-bottom: 0.5em;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #9be7d6, #ffd6e0);
+      border-radius: 2px;
+    }
+    .section-subtitle {
+      text-align: center;
+      color: #857a6f;
+      font-size: 1.1em;
+      margin-bottom: 3em;
+      font-weight: 300;
+    }
+
+    /* Chakra Grid */
+    .chakra-body-container {
+      display: flex;
+      justify-content: center;
+      margin: 3em 0 4em 0;
+    }
+    .chakra-body {
+      max-width: 200px;
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.1));
+    }
+    .chakra-point {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .chakra-point:hover circle:first-child {
+      r: 25;
+      opacity: 0.5;
+    }
+    .chakra-point:hover circle:nth-child(2) {
+      r: 16;
+    }
+    .chakra-point.active circle:first-child {
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.6; r: 25; }
+    }
+    
+    .chakra-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+      gap: 2em;
+      margin-top: 3em;
+    }
+    .chakra-card {
+      background: white;
+      padding: 2em;
+      border-radius: 20px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .chakra-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--chakra-color);
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+    .chakra-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    }
+    .chakra-card:hover::before {
+      transform: scaleX(1);
+    }
+    .chakra-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.2em;
+    }
+    .chakra-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--chakra-color);
+      margin-right: 1.2em;
+      box-shadow: 0 4px 15px var(--chakra-shadow);
+      transition: transform 0.3s ease;
+    }
+    .chakra-card:hover .chakra-icon {
+      transform: rotate(360deg);
+    }
+    .chakra-name {
+      font-size: 1.4em;
+      font-weight: 600;
+      color: #2d3a36;
+    }
+    .chakra-location {
+      font-size: 0.95em;
+      color: #857a6f;
+      margin-bottom: 0.8em;
+    }
+    .chakra-description {
+      color: #5a6c66;
+      line-height: 1.8;
+    }
+
+    /* Services Section */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2.5em;
+      margin-top: 3em;
+    }
+    .service-card {
+      background: white;
+      padding: 2.5em;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+    }
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+    }
+    .service-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5em;
+      background: linear-gradient(135deg, #9be7d6, #b5e8dd);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5em;
+    }
+    .service-title {
+      font-size: 1.3em;
+      font-weight: 600;
+      margin-bottom: 0.8em;
+      color: #2d3a36;
+    }
+    .service-description {
+      color: #5a6c66;
+      line-height: 1.8;
+    }
+
+    /* About Section */
+    .about-content {
+      background: white;
+      padding: 3em;
+      border-radius: 25px;
+      box-shadow: 0 5px 30px rgba(0,0,0,0.08);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .about-content p {
+      font-size: 1.15em;
+      line-height: 2;
+      color: #5a6c66;
+      margin-bottom: 1.5em;
+    }
+    .about-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Contact Section */
+    .contact-section {
+      background: linear-gradient(135deg, #e8f8f5 0%, #fef0f3 100%);
+    }
+    .contact-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2em;
+      margin-top: 3em;
+    }
+    .contact-card {
+      background: white;
+      padding: 2em;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+    .contact-icon {
+      font-size: 2.5em;
+      margin-bottom: 0.5em;
+    }
+    .contact-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      margin-bottom: 0.5em;
+      color: #2d3a36;
+    }
+    .contact-detail {
+      color: #5a6c66;
+      font-size: 1.05em;
+    }
+
+    /* Footer */
+    footer { 
+      background: #2d3a36;
+      color: #b0c4bd;
+      text-align: center; 
+      padding: 2em 1.5em;
+    }
+    footer p {
+      font-size: 0.95em;
+      line-height: 1.8;
+    }
+
+    /* Responsive */
+    @media(max-width: 768px) {
+      h1 { font-size: 2.2em; }
+      .tagline { font-size: 1.1em; }
+      .section-title { font-size: 1.8em; }
+      .chakra-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>豐芝淳七脈輪身心靈SPA</h1>
+      <p class="tagline">淨化能量 · 釋放壓力 · 啟動自我療癒</p>
+      <a href="tel:0933205233" class="cta-button">立即預約體驗</a>
+    </div>
+  </div>
+
+  <!-- Chakras Section -->
+  <section>
+    <div class="container">
+      <h2 class="section-title">認識七脈輪</h2>
+      <p class="section-subtitle">透過七脈輪能量平衡，開啟身心靈的深層療癒之旅</p>
+      
+      <!-- Human Body with Chakras -->
+      <div class="chakra-body-container">
+        <svg class="chakra-body" viewBox="0 0 200 500" xmlns="http://www.w3.org/2000/svg">
+          <!-- Body silhouette -->
+          <defs>
+            <linearGradient id="bodyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#d4ebe6;stop-opacity:0.6" />
+              <stop offset="100%" style="stop-color:#b8dfd7;stop-opacity:0.4" />
+            </linearGradient>
+          </defs>
+          
+          <!-- Head -->
+          <circle cx="100" cy="50" r="30" fill="url(#bodyGradient)" stroke="#9be7d6" stroke-width="2"/>
+          
+          <!-- Neck -->
+          <rect x="85" y="75" width="30" height="25" fill="url(#bodyGradient)" stroke="#9be7d6" stroke-width="2"/>
+          
+          <!-- Torso -->
+          <ellipse cx="100" cy="150" rx="50" ry="70" fill="url(#bodyGradient)" stroke="#9be7d6" stroke-width="2"/>
+          
+          <!-- Lower body -->
+          <path d="M 60 200 Q 60 250 70 300 L 70 450 M 140 200 Q 140 250 130 300 L 130 450" 
+                stroke="#9be7d6" stroke-width="2" fill="none"/>
+          <ellipse cx="100" cy="240" rx="45" ry="40" fill="url(#bodyGradient)" stroke="#9be7d6" stroke-width="2"/>
+          
+          <!-- Chakra 7 - Crown (頂輪) -->
+          <g class="chakra-point" data-chakra="7">
+            <circle cx="100" cy="20" r="15" fill="#C77DFF" opacity="0.2"/>
+            <circle cx="100" cy="20" r="10" fill="#C77DFF" opacity="0.5"/>
+            <circle cx="100" cy="20" r="6" fill="#C77DFF"/>
+            <text x="100" y="25" text-anchor="middle" fill="white" font-size="9" font-weight="bold">7</text>
+          </g>
+          
+          <!-- Chakra 6 - Third Eye (眉心輪) -->
+          <g class="chakra-point" data-chakra="6">
+            <circle cx="100" cy="45" r="14" fill="#7067CF" opacity="0.2"/>
+            <circle cx="100" cy="45" r="9" fill="#7067CF" opacity="0.5"/>
+            <circle cx="100" cy="45" r="5" fill="#7067CF"/>
+            <text x="100" y="49" text-anchor="middle" fill="white" font-size="8" font-weight="bold">6</text>
+          </g>
+          
+          <!-- Chakra 5 - Throat (喉輪) -->
+          <g class="chakra-point" data-chakra="5">
+            <circle cx="100" cy="85" r="14" fill="#247BA0" opacity="0.2"/>
+            <circle cx="100" cy="85" r="9" fill="#247BA0" opacity="0.5"/>
+            <circle cx="100" cy="85" r="5" fill="#247BA0"/>
+            <text x="100" y="89" text-anchor="middle" fill="white" font-size="8" font-weight="bold">5</text>
+          </g>
+          
+          <!-- Chakra 4 - Heart (心輪) -->
+          <g class="chakra-point" data-chakra="4">
+            <circle cx="100" cy="135" r="16" fill="#1B998B" opacity="0.2"/>
+            <circle cx="100" cy="135" r="11" fill="#1B998B" opacity="0.5"/>
+            <circle cx="100" cy="135" r="6" fill="#1B998B"/>
+            <text x="100" y="140" text-anchor="middle" fill="white" font-size="9" font-weight="bold">4</text>
+          </g>
+          
+          <!-- Chakra 3 - Solar Plexus (太陽神經叢) -->
+          <g class="chakra-point" data-chakra="3">
+            <circle cx="100" cy="175" r="14" fill="#FFD23F" opacity="0.2"/>
+            <circle cx="100" cy="175" r="9" fill="#FFD23F" opacity="0.5"/>
+            <circle cx="100" cy="175" r="5" fill="#FFD23F"/>
+            <text x="100" y="179" text-anchor="middle" fill="white" font-size="8" font-weight="bold">3</text>
+          </g>
+          
+          <!-- Chakra 2 - Sacral (腹輪) -->
+          <g class="chakra-point" data-chakra="2">
+            <circle cx="100" cy="225" r="14" fill="#F46036" opacity="0.2"/>
+            <circle cx="100" cy="225" r="9" fill="#F46036" opacity="0.5"/>
+            <circle cx="100" cy="225" r="5" fill="#F46036"/>
+            <text x="100" y="229" text-anchor="middle" fill="white" font-size="8" font-weight="bold">2</text>
+          </g>
+          
+          <!-- Chakra 1 - Root (海底輪) -->
+          <g class="chakra-point" data-chakra="1">
+            <circle cx="100" cy="280" r="14" fill="#D72638" opacity="0.2"/>
+            <circle cx="100" cy="280" r="9" fill="#D72638" opacity="0.5"/>
+            <circle cx="100" cy="280" r="5" fill="#D72638"/>
+            <text x="100" y="284" text-anchor="middle" fill="white" font-size="8" font-weight="bold">1</text>
+          </g>
+        </svg>
+      </div>
+      
+      <div class="chakra-grid">
+        <div class="chakra-card" data-chakra="1" style="--chakra-color:#D72638; --chakra-shadow:rgba(215,38,56,0.3);">
+          <div class="chakra-header">
+            <div class="chakra-icon"></div>
+            <div class="chakra-name">① 海底輪</div>
+          </div>
+          <div class="chakra-location">位置：尾椎</div>
+          <div class="chakra-description">連結大地能量，帶來穩定安全感，強化生存本能與身體根基</div>
+        </div>
+
+        <div class="chakra-card" data-chakra="2" style="--chakra-color:#F46036; --chakra-shadow:rgba(244,96,54,0.3);">
+          <div class="chakra-header">
+            <div class="chakra-icon"></div>
+            <div class="chakra-name">② 腹輪</div>
+          </div>
+          <div class="chakra-location">位置：下腹部</div>
+          <div class="chakra-description">喚醒創造力與熱情，釋放情緒壓抑，提升生命活力</div>
+        </div>
+
+        <div class="chakra-card" data-chakra="3" style="--chakra-color:#FFD23F; --chakra-shadow:rgba(255,210,63,0.3);">
+          <div class="chakra-header">
+            <div class="chakra-icon"></div>
+            <div class="chakra-name">③ 太陽神經叢</div>
+          </div>
+          <div class="chakra-location">位置：胃部</div>
+          <div class="chakra-description">增強自信與個人力量，紓解焦慮緊繃，找回內在光芒</div>
+        </div>
+
+        <div class="chakra-card" data-chakra="4" style="--chakra-color:#1B998B; --chakra-shadow:rgba(27,153,139,0.3);">
+          <div class="chakra-header">
+            <div class="chakra-icon"></div>
+            <div class="chakra-name">④ 心輪</div>
+          </div>
+          <div class="chakra-location">位置：胸腔中央</div>
+          <div class="chakra-description">調和情感能量，軟化內在傷痛，開啟愛與被愛的能力</div>
+        </div>
+
+        <div class="chakra-card" data-chakra="5" style="--chakra-color:#247BA0; --chakra-shadow:rgba(36,123,160,0.3);">
+          <div class="chakra-header">
+            <div class="chakra-icon"></div>
+            <div class="chakra-name">⑤ 喉輪</div>
+          </div>
+          <div class="chakra-location">位置：咽喉</div>
+          <div class="chakra-description">促進真實溝通與表達，釋放壓抑情緒與壓力</div>
+        </div>
+
+        <div class="chakra-card" data-chakra="6" style="--chakra-color:#7067CF; --chakra-shadow:rgba(112,103,207,0.3);">
+          <div class="chakra-header">
+            <div class="chakra-icon"></div>
+            <div class="chakra-name">⑥ 眉心輪</div>
+          </div>
+          <div class="chakra-location">位置：額頭中央</div>
+          <div class="chakra-description">提升直覺與洞察力，靜化雜念，開啟內在智慧</div>
+        </div>
+
+        <div class="chakra-card" data-chakra="7" style="--chakra-color:#C77DFF; --chakra-shadow:rgba(199,125,255,0.3);">
+          <div class="chakra-header">
+            <div class="chakra-icon"></div>
+            <div class="chakra-name">⑦ 頂輪</div>
+          </div>
+          <div class="chakra-location">位置：頭頂</div>
+          <div class="chakra-description">連結宇宙能量，帶來全然寧靜與靈性覺醒</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section style="background:#f2f9f7;">
+    <div class="container">
+      <h2 class="section-title">療癒服務</h2>
+      <p class="section-subtitle">專屬設計的能量療程，溫柔而精準地照顧您的身心靈</p>
+      
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">🌸</div>
+          <div class="service-title">七脈輪能量按摩</div>
+          <div class="service-description">融合東西方按摩技法，針對七個脈輪進行深層能量疏通與平衡</div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🧘</div>
+          <div class="service-title">冥想引導療癒</div>
+          <div class="service-description">透過專業冥想引導，進入深度放鬆，釋放潛意識壓力</div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">💎</div>
+          <div class="service-title">水晶能量療法</div>
+          <div class="service-description">運用天然水晶的振動頻率，調整脈輪能量場，提升整體能量</div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🌿</div>
+          <div class="service-title">芳香精油療程</div>
+          <div class="service-description">選用純淨精油，透過嗅覺療癒與肌膚吸收，深度放鬆身心</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section>
+    <div class="container">
+      <h2 class="section-title">關於豐芝淳</h2>
+      <p class="section-subtitle">由心出發 · 溫柔陪伴 · 淨化療癒</p>
+      
+      <div class="about-content">
+        <p>
+          豐芝淳七脈輪身心靈SPA，融合東西方療癒智慧，運用七脈輪能量平衡理論，協助您釋放生活中累積的壓力、疲勞與情緒阻塞，開啟身心靈全面深層的修復之旅。
+        </p>
+        <p>
+          我們相信，每個人都擁有與生俱來的自癒能力。當七個脈輪能量和諧流動時，身心靈自然達到平衡狀態。每一次療程都是專屬設計，溫柔而精準，讓每位來賓在安心舒適的環境中，感受當下的放鬆與能量平衡。
+        </p>
+        <p>
+          期待為您帶來真正的舒適、療癒，以及自癒力的啟動。讓我們陪伴您，找回內在的平靜與力量。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="contact-section">
+    <div class="container">
+      <h2 class="section-title">聯絡我們</h2>
+      <p class="section-subtitle">歡迎預約您的療癒之旅</p>
+      
+      <div class="contact-info">
+        <div class="contact-card">
+          <div class="contact-icon">📍</div>
+          <div class="contact-title">地址</div>
+          <div class="contact-detail">台灣高雄市<br>（詳細地址請來電洽詢）</div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon">📞</div>
+          <div class="contact-title">預約專線</div>
+          <div class="contact-detail"><a href="tel:0933205233" style="color:#1B998B; text-decoration:none; font-size:1.3em; font-weight:600;">0933-205-233</a><br><span style="font-size:0.9em;">營業時間 10:00-20:00</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 豐芝淳七脈輪身心靈SPA</p>
+      <p>由心出發 · 溫柔陪伴 · 淨化療癒</p>
+    </div>
+  </footer>
+</body>
+</html>
