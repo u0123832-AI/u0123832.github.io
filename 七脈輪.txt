@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七脈輪身心療癒中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0e9e0;
+        }
+        .chakra-btn {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .chakra-btn.active {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+        }
+        .chakra-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.5s ease-in-out;
+        }
+        .gradient-bg {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .info-section {
+            display: none;
+        }
+        .info-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .submit-btn, .assessment-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: background-color 0.3s ease;
+        }
+        .submit-btn:hover, .assessment-btn:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+        .loader {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .chakra-indicator {
+            position: absolute;
+            transition: all 0.3s ease;
+            opacity: 0.8;
+            filter: grayscale(50%);
+            width: 10%;
+            height: 10%;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.7);
+        }
+        .chakra-indicator.active {
+            opacity: 1;
+            filter: grayscale(0%);
+            z-index: 10;
+            animation: pulse 2s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1.3);
+                box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            }
+            50% {
+                transform: scale(1.4);
+                box-shadow: 0 0 25px rgba(255, 255, 255, 1);
+            }
+            100% {
+                transform: scale(1.3);
+                box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            }
+        }
+        .comment-section {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        #assessment-modal, #guidance-modal, #meditation-modal {
+            transition: opacity 0.3s ease-in-out;
+        }
+        #assessment-modal.hidden, #guidance-modal.hidden, #meditation-modal.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #assessment-modal:not(.hidden), #guidance-modal:not(.hidden), #meditation-modal:not(.hidden) {
+            opacity: 1;
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body class="gradient-bg text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <!-- Header -->
+        <header class="text-center mb-8 md:mb-12">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-2" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.4);">豐芝淳七脈輪的療癒之旅</h1>
+            <p class="text-lg md:text-xl text-white/90">透過按摩釋放身體壓力，強化平衡內在能量</p>
+            <!-- New Daily Guidance Button -->
+            <div class="mt-6">
+                <button id="daily-guidance-btn" class="assessment-btn text-white font-bold py-3 px-6 rounded-full text-lg transition-transform transform hover:scale-105">✨ 獲取今日療癒指引</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-4xl mx-auto">
+            
+            <!-- Chakra Information Display -->
+            <div class="w-full">
+                <div id="chakra-info-container" class="chakra-card rounded-2xl p-4 md:p-8 flex flex-col md:flex-row gap-8 items-center">
+                    <!-- New Chakra Diagram -->
+                    <div id="chakra-diagram-container" class="w-full md:w-1/3 relative aspect-square" style="filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));">
+                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                            <g transform="translate(0, 5)" stroke="white" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <!-- head -->
+                                <path d="M50,12 a10,10 0 1,0 0.001,0 Z" />
+                                <!-- body -->
+                                <path d="M50,22 v28" />
+                                <!-- arms -->
+                                <path d="M50,32 a18,18 0 0,0 -18,18 h-2 a8,8 0 0,0 -8,8 v2" />
+                                <path d="M50,32 a18,18 0 0,1 18,18 h2 a8,8 0 0,1 8,8 v2" />
+                                <!-- legs -->
+                                <path d="M50,50 a25,25 0 0,0 -25,25 a15,15 0 0,0 15,15 h20 a15,15 0 0,0 15,-15 a25,25 0 0,0 -25,-25 Z" />
+                                <path d="M32,78 a18,18 0 0,0 36,0" />
+                            </g>
+                        </svg>
+                        <!-- Indicators will be positioned by JS -->
+                    </div>
+                     <!-- Info content will be dynamically inserted here -->
+                     <div id="info-content-wrapper" class="w-full md:w-2/3"></div>
+                </div>
+            </div>
+
+            <!-- Chakra Selection Buttons -->
+            <div class="mt-8">
+                 <h2 class="text-2xl font-bold text-white text-center mb-4">點擊下方脈輪查看詳情</h2>
+                <div id="chakra-buttons" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
+                    <!-- Buttons will be generated by JS -->
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Contact Section -->
+        <footer class="text-center mt-12 md:mt-20 py-8 border-t border-white/20">
+            <h2 class="text-3xl font-bold text-white mb-4">聯絡我們</h2>
+            <p class="text-white/90 mb-6">預約您的專屬療癒時光，開啟身心平衡之旅。</p>
+            <div class="text-white/90 space-y-2">
+                <p><strong>電話:</strong> 0933-205-233</p>
+                <p><strong>電子郵件:</strong> contact@chakrawellness.com</p>
+                <p><strong>地址:</strong> 高雄市可到府</p>
+            </div>
+             <!-- Social Media Links -->
+            <div class="flex justify-center space-x-6 my-6">
+                <a href="#" target="_blank" class="text-white/90 hover:text-white transition-colors" aria-label="LINE">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10s10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8s8 3.589 8 8s-3.589 8-8 8z"/><path d="M14.5 10.312h-1.6v-1.5c0-.414-.336-.75-.75-.75s-.75.336-.75.75v1.5h-1.6c-.414 0-.75.336-.75.75s.336.75.75.75h1.6v1.5c0 .414.336.75.75.75s.75-.336.75-.75v-1.5h1.6c.414 0 .75-.336.75-.75s-.336-.75-.75-.75zm-7.086 3.065c-.256-1.16.891-2.207 2.051-1.951c.36.078.684.258.949.514c.795.772.818 2.022.045 2.817c-.773.795-2.022.818-2.817.045c-.256-.265-.436-.589-.514-.949-.078-.36-.03-1.12.286-1.476zm6.172-3.065c.256 1.16-.891-2.207-2.051-1.951c-.36-.078-.684-.258-.949-.514c-.795-.772-.818-2.022-.045-2.817c.773-.795-2.022.818-2.817.045c.256.265.436.589.514.949.078-.36.03-1.12-.286-1.476z"/></svg>
+                </a>
+                <a href="#" target="_blank" class="text-white/90 hover:text-white transition-colors" aria-label="Facebook">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+                <a href="#" target="_blank" class="text-white/90 hover:text-white transition-colors" aria-label="Instagram">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                         <path fill-rule="evenodd" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.012 3.584-.07 4.85c-.148 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.85-.069zm0 1.802c-3.153 0-3.509.012-4.724.068-2.733.124-3.951 1.344-4.074 4.074-.056 1.215-.068 1.57-.068 4.724s.012 3.509.068 4.724c.123 2.733 1.343 3.952 4.074 4.074 1.215.056 1.57.068 4.724.068s3.509-.012 4.724-.068c2.733-.123 3.952-1.343 4.074-4.074.056-1.215.068-1.57.068-4.724s-.012-3.509-.068-4.724c-.123-2.732-1.343-3.951-4.074-4.074-1.215-.056-1.57-.068-4.724-.068zM12 6.865c-2.836 0-5.135 2.299-5.135 5.135s2.299 5.135 5.135 5.135 5.135-2.299 5.135-5.135S14.836 6.865 12 6.865zm0 8.468c-1.84 0-3.333-1.493-3.333-3.333s1.493-3.333 3.333-3.333 3.333 1.493 3.333 3.333-1.493 3.333-3.333 3.333zm4.965-6.417c-.781 0-1.414.633-1.414 1.414s.633 1.414 1.414 1.414 1.414-.633 1.414-1.414-.634-1.414-1.414-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+            <div class="mt-6">
+                <a href="#" class="inline-block bg-white/30 text-white font-bold py-2 px-6 rounded-full hover:bg-white/50 transition-colors">立即預約</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Daily Guidance Modal -->
+    <div id="guidance-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
+        <div class="chakra-card rounded-2xl p-6 md:p-8 max-w-lg w-full relative max-h-[90vh] flex flex-col">
+            <button id="close-guidance-btn" class="absolute top-4 right-4 text-white text-3xl leading-none">&times;</button>
+            <h2 id="guidance-title" class="text-3xl font-bold text-white mb-4 text-center">今日療癒指引</h2>
+            <div id="guidance-content" class="overflow-y-auto">
+                <p class="text-white/90 mb-4">請在下方簡單描述您今天整體的感覺，無論是身體上的疲勞、情緒上的波動，或是任何想法，AI療癒師將為您提供指引。</p>
+                <textarea id="guidance-input" class="w-full bg-white/20 rounded p-3 text-white placeholder-white/70" rows="4" placeholder="例如：今天覺得肩膀很緊，而且有點焦慮..."></textarea>
+                <button id="submit-guidance-btn" class="assessment-btn w-full mt-4 text-white font-bold py-3 px-4 rounded-lg">獲取指引</button>
+            </div>
+            <div id="guidance-result" class="mt-4 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <!-- Assessment Modal -->
+    <div id="assessment-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
+        <div class="chakra-card rounded-2xl p-6 md:p-8 max-w-lg w-full relative max-h-[90vh] flex flex-col">
+            <button id="close-assessment-btn" class="absolute top-4 right-4 text-white text-3xl leading-none">&times;</button>
+            <h2 id="assessment-title" class="text-3xl font-bold text-white mb-4 text-center">脈輪能量狀態自測</h2>
+            <div id="assessment-content" class="overflow-y-auto">
+                <p id="assessment-instruction" class="text-white/90 mb-4">請勾選您最近感受到的狀況：</p>
+                <div id="assessment-questions" class="space-y-3"></div>
+                <button id="submit-assessment-btn" class="assessment-btn w-full mt-6 text-white font-bold py-3 px-4 rounded-lg">查看分析結果</button>
+            </div>
+            <div id="assessment-result" class="mt-4 overflow-y-auto"></div>
+        </div>
+    </div>
+    
+    <!-- Meditation Modal -->
+    <div id="meditation-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
+        <div class="chakra-card rounded-2xl p-6 md:p-8 max-w-lg w-full relative max-h-[90vh] flex flex-col">
+            <button id="close-meditation-btn" class="absolute top-4 right-4 text-white text-3xl leading-none">&times;</button>
+            <h2 id="meditation-title" class="text-3xl font-bold text-white mb-4 text-center">個人化冥想導詞</h2>
+            <div id="meditation-content" class="overflow-y-auto">
+                <div class="space-y-4">
+                    <div>
+                        <label for="meditation-duration" class="block text-white/90 mb-2">請選擇冥想時間：</label>
+                        <select id="meditation-duration" class="w-full bg-white/20 rounded p-3 text-white">
+                            <option value="3分鐘">3分鐘</option>
+                            <option value="5分鐘" selected>5分鐘</option>
+                            <option value="10分鐘">10分鐘</option>
+                        </select>
+                    </div>
+                    <div>
+                         <label for="meditation-focus" class="block text-white/90 mb-2">想專注於什麼主題？（選填）</label>
+                        <input type="text" id="meditation-focus" class="w-full bg-white/20 rounded p-3 text-white placeholder-white/70" placeholder="例如：釋放工作壓力">
+                    </div>
+                </div>
+                <button id="submit-meditation-btn" class="assessment-btn w-full mt-6 text-white font-bold py-3 px-4 rounded-lg">生成冥想導詞</button>
+            </div>
+            <div id="meditation-result" class="mt-4 overflow-y-auto"></div>
+        </div>
+    </div>
+
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, onSnapshot, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+
+        // --- Firebase Configuration ---
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "...", authDomain: "...", projectId: "..." };
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        
+        // --- Initialize Firebase ---
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        let currentUser = null;
+        let unsubscribeComments = null;
+        let selectedFile = null;
+        let activeChakra = null;
+
+        // --- Authentication ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                initializeAppLogic();
+            } else {
+                 try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } catch (error) {
+                    console.error("Authentication failed:", error);
+                }
+            }
+        });
+
+        // --- Chakra Data ---
+        const chakraData = [
+             { id: 'root', name: '海底輪', color: 'bg-red-500', pos: {top: '85%', left: '45%'}, location: '脊椎底部（尾骨）', bodyParts: '腰部、骨盆、腿部、坐骨神經', symptoms: '腰酸背痛、免疫力低、婦科病、便秘、肥胖、痔瘡、坐骨神經痛', massageHelp: '穩重按壓提升血液循環，緩解焦慮，增強身體穩定感', questions: ['最近是否常感到腰酸背痛或下肢無力？', '是否感覺缺乏安全感，對未來感到焦慮？', '財務狀況是否讓您感到不安？', '是否覺得自己與家庭或團體的連結感薄弱？', '是否常覺得心浮氣躁、不夠踏實？'] },
+            { id: 'sacral', name: '臍輪', color: 'bg-orange-500', pos: {top: '70%', left: '45%'}, location: '下腹部', bodyParts: '生殖器、泌尿系統、腎臟、膀胱、子宮', symptoms: '陰虛陽萎、不易受孕、月經不調、更年期症狀、乳腺問題', massageHelp: '溫和腹部按摩促進內臟健康，釋放情緒阻滯', questions: ['是否覺得生活缺乏樂趣或熱情？', '在情感表達上是否感到困難或壓抑？', '對於親密關係是否感到恐懼或不滿足？', '是否常有莫名的罪惡感？', '是否感到創意枯竭或對新事物失去興趣？'] },
+            { id: 'solar', name: '太陽神經叢', color: 'bg-yellow-400', pos: {top: '58%', left: '45%'}, location: '胃部', bodyParts: '胃腸、肝臟、脾臟', symptoms: '消化不良、脾胃功能失常、便秘、潰瘍、糖尿病', massageHelp: '深層推揉改善消化系統功能，提升內在力量', questions: ['是否常感到缺乏自信或意志力薄弱？', '容易對自己或他人產生批判嗎？', '是否在做決定時猶豫不決？', '常有消化不良或胃部不適的問題嗎？', '是否覺得無法掌控自己的生活？'] },
+            { id: 'heart', name: '心輪', color: 'bg-green-500', pos: {top: '45%', left: '45%'}, location: '心臟附近胸腔', bodyParts: '心臟、肺部、胸腺、呼吸系統、免疫系統', symptoms: '心肺疾病、胸悶、呼吸短促、肩背酸痛、高血壓', massageHelp: '舒緩胸腔和肩背，促進呼吸循環，減緩心臟壓力', questions: ['是否很難原諒自己或他人？', '常感到孤單或與人疏離嗎？', '對愛與被愛感到恐懼嗎？', '是否常有胸悶、心悸或呼吸不順的感覺？', '是否難以對自己或他人產生同理心？'] },
+            { id: 'throat', name: '喉輪', color: 'bg-blue-500', pos: {top: '32%', left: '45%'}, location: '喉部、頸部', bodyParts: '喉嚨、頸椎、甲狀腺、口腔、牙齒、聽覺系統', symptoms: '喉頭炎、頸部僵硬、甲狀腺問題、聲音沙啞、聽力障礙', massageHelp: '頸部按摩促進甲狀腺和聲帶健康，放鬆頸部緊張', questions: ['是否不敢或不善於表達真實的想法？', '說話時是否沒有人傾聽？', '是否常有喉嚨痛、聲音沙啞或頸部僵硬的問題？', '是否習慣性地說謊或無法信守承諾？', '是否難以傾聽他人的意見？'] },
+            { id: 'thirdEye', name: '眉心輪', color: 'bg-indigo-500', pos: {top: '20%', left: '45%'}, location: '兩眼之間', bodyParts: '眼睛、額頭、鼻子、神經系統、松果腺', symptoms: '頭痛、視覺模糊、眼部疲勞、惡夢', massageHelp: '以溫和按摩或指壓放鬆眉心和眼部周圍，緩解頭痛和疲勞', questions: ['是否覺得思緒混亂，難以集中精神？', '不相信自己的直覺嗎？', '是否常做惡夢或睡眠品質不佳？', '常有頭痛或眼壓高的問題嗎？', '是否覺得缺乏想像力或看不清未來的方向？'] },
+            { id: 'crown', name: '頂輪', color: 'bg-purple-500', pos: {top: '10%', left: '45%'}, location: '頭頂', bodyParts: '大腦、神經系統、腦部', symptoms: '頭痛、偏頭痛、失眠、神經緊張、記憶力差', massageHelp: '頭部輕柔按摩促進腦部血液循環，緩解腦部緊張', questions: ['是否覺得生活沒有目標或意義？', '對靈性成長或更高智慧抱持懷疑態度嗎？', '是否常感到與世界格格不入？', '有學習困難或記憶力衰退的狀況嗎？', '是否感到與宇宙或更高力量的連結是斷開的？'] }
+        ];
+
+        const buttonsContainer = document.getElementById('chakra-buttons');
+        const infoContentWrapper = document.getElementById('info-content-wrapper');
+        const diagramContainer = document.getElementById('chakra-diagram-container');
+        
+        function displayChakraInfo(chakraId) {
+            activeChakra = chakraData.find(c => c.id === chakraId);
+            if (!activeChakra) return;
+
+            infoContentWrapper.innerHTML = generateInfoHtml(activeChakra);
+            
+            document.getElementById('comment-form').addEventListener('submit', handleCommentSubmit);
+            document.getElementById('image-upload').addEventListener('change', handleImageSelect);
+            document.getElementById('start-assessment-btn').addEventListener('click', () => startAssessment(chakraId));
+            document.getElementById('start-meditation-btn').addEventListener('click', () => startMeditation(chakraId));
+            
+            fetchComments(chakraId);
+           
+            document.querySelectorAll('.chakra-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.chakraId === chakraId));
+            document.querySelectorAll('.chakra-indicator').forEach(indicator => indicator.classList.toggle('active', indicator.dataset.chakraId === chakraId));
+        }
+        
+        function generateInfoHtml(chakra) {
+            return `
+                <div class="info-section active">
+                    <h2 class="text-4xl font-bold mb-4 text-white text-center">${chakra.name}</h2>
+                    <div class="space-y-4 text-white/90">
+                        <div><h3 class="font-semibold text-lg text-white">位置:</h3><p>${chakra.location}</p></div>
+                        <div><h3 class="font-semibold text-lg text-white">對應身體部分:</h3><p>${chakra.bodyParts}</p></div>
+                        <div><h3 class="font-semibold text-lg text-white">失衡症狀:</h3><p>${chakra.symptoms}</p></div>
+                        <div><h3 class="font-semibold text-lg text-white">按摩對身體的幫助:</h3><p>${chakra.massageHelp}</p></div>
+                    </div>
+                    
+                    <!-- Action Buttons Section -->
+                    <div class="mt-6 pt-4 border-t border-white/20 grid grid-cols-1 md:grid-cols-2 gap-4">
+                         <button id="start-assessment-btn" class="assessment-btn w-full text-white font-bold py-3 px-4 rounded-lg">✨ 開始脈輪能量自測</button>
+                         <button id="start-meditation-btn" class="assessment-btn w-full text-white font-bold py-3 px-4 rounded-lg">✨ 生成個人化冥想導詞</button>
+                    </div>
+
+                    <!-- Comment Section -->
+                    <div class="mt-4 pt-4 border-t border-white/20">
+                        <h3 class="text-2xl font-bold text-white mb-3">分享您的感受</h3>
+                        <div id="comments-list" class="comment-section bg-black/10 rounded-lg p-3 mb-3 space-y-2">
+                           <div class="loader"></div>
+                        </div>
+                        <form id="comment-form">
+                             <div class="flex items-start gap-2">
+                                <textarea id="comment-input" class="flex-grow bg-white/20 rounded p-2 text-white placeholder-white/70" rows="2" placeholder="在這裡輸入您的留言..."></textarea>
+                                <label for="image-upload" class="cursor-pointer p-3 bg-white/20 rounded-lg hover:bg-white/40 transition-colors">
+                                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                </label>
+                                <input id="image-upload" type="file" class="hidden" accept="image/*">
+                            </div>
+                            <div id="image-preview-container" class="mt-2"></div>
+                            <button type="submit" class="submit-btn w-full mt-2 text-white font-bold py-2 px-4 rounded-lg">送出</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleImageSelect(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                selectedFile = null;
+                document.getElementById('image-preview-container').innerHTML = '';
+                return;
+            };
+
+            selectedFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('image-preview-container').innerHTML = `<img src="${e.target.result}" alt="圖片預覽" class="max-h-24 rounded-lg">`;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        async function handleCommentSubmit(event) {
+            event.preventDefault();
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            if (!currentUser || !activeChakra) return;
+
+            const commentInput = document.getElementById('comment-input');
+            const text = commentInput.value.trim();
+            const file = selectedFile;
+            
+            if (!text && !file) return;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<div class="loader mx-auto" style="width:20px; height:20px;"></div>';
+
+            try {
+                let imageUrl = null;
+                if (file) {
+                    const storageRef = ref(storage, `artifacts/${appId}/public/images/${activeChakra.id}/${Date.now()}_${file.name}`);
+                    const uploadResult = await uploadBytes(storageRef, file);
+                    imageUrl = await getDownloadURL(uploadResult.ref);
+                }
+
+                const commentData = {
+                    userId: currentUser.uid,
+                    createdAt: serverTimestamp()
+                };
+                if (text) commentData.text = text;
+                if (imageUrl) commentData.imageUrl = imageUrl;
+
+                const commentsColRef = collection(db, `artifacts/${appId}/public/data/chakras/${activeChakra.id}/comments`);
+                await addDoc(commentsColRef, commentData);
+                
+                commentInput.value = ''; 
+                selectedFile = null;
+                document.getElementById('image-preview-container').innerHTML = '';
+                document.getElementById('image-upload').value = '';
+            } catch (error) {
+                console.error("Error submitting comment: ", error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '送出';
+            }
+        }
+
+        function fetchComments(chakraId) {
+            if (unsubscribeComments) unsubscribeComments();
+
+            const commentsList = document.getElementById('comments-list');
+            commentsList.innerHTML = '<div class="loader"></div>';
+            const commentsColRef = collection(db, `artifacts/${appId}/public/data/chakras/${chakraId}/comments`);
+            const q = query(commentsColRef, orderBy('createdAt', 'desc'));
+
+            unsubscribeComments = onSnapshot(q, (querySnapshot) => {
+                if (querySnapshot.empty) {
+                    commentsList.innerHTML = '<p class="text-white/80 text-center p-4">還沒有人留言，成為第一個分享的人！</p>';
+                    return;
+                }
+                
+                let commentsHtml = '';
+                querySnapshot.forEach((doc) => {
+                    const comment = doc.data();
+                    const date = comment.createdAt ? comment.createdAt.toDate().toLocaleString('zh-TW') : '剛剛';
+                    const imageHtml = comment.imageUrl ? `<img src="${comment.imageUrl}" alt="留言圖片" class="mt-2 rounded-lg max-w-full h-auto max-h-48 cursor-pointer" onclick="window.open('${comment.imageUrl}')">` : '';
+                    const textHtml = comment.text ? `<p class="text-white">${comment.text}</p>` : '';
+
+                    commentsHtml += `
+                        <div class="bg-black/20 p-2 rounded">
+                            ${textHtml}
+                            ${imageHtml}
+                            <p class="text-xs text-white/60 text-right mt-1">${date}</p>
+                        </div>
+                    `;
+                });
+                commentsList.innerHTML = commentsHtml;
+            }, (error) => {
+                console.error("Error fetching comments: ", error);
+                commentsList.innerHTML = '<p class="text-red-300 text-center">讀取留言時發生錯誤。</p>';
+            });
+        }
+
+        // --- Assessment Functions ---
+        const assessmentModal = document.getElementById('assessment-modal');
+        const assessmentTitle = document.getElementById('assessment-title');
+        const questionsContainer = document.getElementById('assessment-questions');
+        const assessmentResultContainer = document.getElementById('assessment-result');
+        
+        function startAssessment(chakraId) {
+            activeChakra = chakraData.find(c => c.id === chakraId);
+            if (!activeChakra) return;
+
+            assessmentTitle.textContent = `${activeChakra.name} 能量狀態自測`;
+            questionsContainer.innerHTML = activeChakra.questions.map((q, index) => `
+                <label class="flex items-center space-x-3 p-3 bg-white/10 rounded-lg cursor-pointer hover:bg-white/20">
+                    <input type="checkbox" name="question" value="${q}" class="w-5 h-5 rounded text-blue-500 bg-gray-700 border-gray-600 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2">
+                    <span class="text-white">${q}</span>
+                </label>
+            `).join('');
+            
+            assessmentResultContainer.innerHTML = '';
+            document.getElementById('assessment-content').style.display = 'block';
+            assessmentModal.classList.remove('hidden');
+        }
+
+        function closeAssessment() {
+            assessmentModal.classList.add('hidden');
+        }
+        document.getElementById('close-assessment-btn').addEventListener('click', closeAssessment);
+        window.closeAssessment = closeAssessment; // Make it globally accessible
+
+        async function getAssessmentResult() {
+            if (!activeChakra) return;
+            const selectedSymptoms = Array.from(document.querySelectorAll('#assessment-questions input:checked')).map(input => input.value);
+            if (selectedSymptoms.length === 0) {
+                assessmentResultContainer.innerHTML = `<p class="text-yellow-300 text-center">請至少選擇一個您感受到的狀況。</p>`;
+                return;
+            }
+            assessmentResultContainer.innerHTML = '<div class="loader"></div>';
+            document.getElementById('assessment-content').style.display = 'none';
+
+            const systemPrompt = "您是一位溫和且富有洞察力的脈輪療癒師。您的任務是根據使用者選擇的與特定脈輪相關的身心症狀，產生一個JSON物件。此物件需包含三個鍵：'analysis'（一段簡短、溫暖的能量狀態分析）、'massage_plan'（一個針對該脈輪的簡單、可行的居家按摩建議，請用換行符號分隔步驟）和 'related_chakras'（根據使用者的狀況，點出1-2個可能也需要關注的相關脈輪，並簡短說明原因）。請避免使用過於醫療性或診斷性的詞語。您的回覆應該要能點出可能的能量阻塞，並給予正向的鼓勵與實際的行動方案。請使用繁體中文。";
+            const userQuery = `我正在檢測我的「${activeChakra.name}」。我最近有的困擾是：[${selectedSymptoms.join('、')}]。請根據這些狀況，為我分析我目前的能量狀態，並提供一個對應的按摩方案，以及建議我關注其他哪個相關的脈輪。`;
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: { responseMimeType: "application/json", responseSchema: { type: "OBJECT", properties: { "analysis": { "type": "STRING" }, "massage_plan": { "type": "STRING" }, "related_chakras": { "type": "STRING" } }, required: ["analysis", "massage_plan", "related_chakras"] }, },
+            };
+            
+            try {
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) throw new Error(`API 請求失敗: ${response.status}`);
+                const result = await response.json();
+                const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (jsonText) {
+                    const data = JSON.parse(jsonText);
+                    assessmentResultContainer.innerHTML = `
+                        <h3 class="text-xl font-bold text-white mb-2">您的能量分析報告</h3>
+                        <div class="p-4 bg-black/20 rounded-lg mb-4">
+                            <h4 class="font-bold text-lg text-white mb-2">能量分析</h4>
+                            <p class="text-white/90">${data.analysis.trim()}</p>
+                        </div>
+                        <div class="p-4 bg-black/20 rounded-lg mb-4">
+                             <h4 class="font-bold text-lg text-white mb-2">專屬按摩建議</h4>
+                            <p class="text-white/90 whitespace-pre-line">${data.massage_plan.trim()}</p>
+                        </div>
+                        <div class="p-4 bg-black/20 rounded-lg">
+                             <h4 class="font-bold text-lg text-white mb-2">其他相關脈輪平衡建議</h4>
+                            <p class="text-white/90">${data.related_chakras.trim()}</p>
+                        </div>
+                        <button onclick="closeAssessment()" class="assessment-btn w-full mt-4 text-white font-bold py-2 px-4 rounded-lg">關閉</button>`;
+                } else { throw new Error('API 回應無效'); }
+            } catch (error) {
+                console.error("Gemini API 呼叫失敗:", error);
+                assessmentResultContainer.innerHTML = `<p class="text-red-300 text-center">抱歉，目前無法生成分析報告，請稍後再試。</p><button onclick="closeAssessment()" class="assessment-btn w-full mt-4 text-white font-bold py-2 px-4 rounded-lg">關閉</button>`;
+            }
+        }
+        document.getElementById('submit-assessment-btn').addEventListener('click', getAssessmentResult);
+
+        // --- Daily Guidance Functions ---
+        const guidanceModal = document.getElementById('guidance-modal');
+        
+        function openGuidance() {
+            document.getElementById('guidance-content').style.display = 'block';
+            document.getElementById('guidance-result').innerHTML = '';
+            document.getElementById('guidance-input').value = '';
+            guidanceModal.classList.remove('hidden');
+        }
+
+        function closeGuidance() {
+            guidanceModal.classList.add('hidden');
+        }
+        document.getElementById('daily-guidance-btn').addEventListener('click', openGuidance);
+        document.getElementById('close-guidance-btn').addEventListener('click', closeGuidance);
+
+        async function getDailyGuidance() {
+            const userInput = document.getElementById('guidance-input').value.trim();
+            if (!userInput) {
+                document.getElementById('guidance-result').innerHTML = `<p class="text-yellow-300 text-center">請輸入您目前的感受。</p>`;
+                return;
+            }
+            const guidanceResultContainer = document.getElementById('guidance-result');
+            guidanceResultContainer.innerHTML = '<div class="loader"></div>';
+            document.getElementById('guidance-content').style.display = 'none';
+
+            const systemPrompt = "您是一位智慧且富同情心的脈輪療癒師。根據使用者對當天身心感受的簡短描述，您的任務是產生一個JSON物件。此物件需包含三個鍵：'dominant_chakra_id'（從['root', 'sacral', 'solar', 'heart', 'throat', 'thirdEye', 'crown']中判斷出最需要關注的脈輪ID）、'guidance'（一段簡短、溫暖、針對該脈輪的療癒指引）和 'action'（一項簡單、正向、可立即執行的建議活動）。請使用繁體中文。";
+            const userQuery = `我今天的感覺是：「${userInput}」。請為我提供療癒指引。`;
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: { responseMimeType: "application/json", responseSchema: { type: "OBJECT", properties: { "dominant_chakra_id": { "type": "STRING" }, "guidance": { "type": "STRING" }, "action": { "type": "STRING" } }, required: ["dominant_chakra_id", "guidance", "action"] }, },
+            };
+
+            try {
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) throw new Error(`API 請求失敗: ${response.status}`);
+                const result = await response.json();
+                const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (jsonText) {
+                    const data = JSON.parse(jsonText);
+                    const recommendedChakra = chakraData.find(c => c.id === data.dominant_chakra_id);
+                    guidanceResultContainer.innerHTML = `
+                        <h3 class="text-xl font-bold text-white mb-2">今日指引</h3>
+                        <div class="p-4 bg-black/20 rounded-lg mb-4">
+                            <h4 class="font-bold text-lg text-white mb-2">重點關注：${recommendedChakra ? recommendedChakra.name : ''}</h4>
+                            <p class="text-white/90">${data.guidance.trim()}</p>
+                        </div>
+                        <div class="p-4 bg-black/20 rounded-lg">
+                             <h4 class="font-bold text-lg text-white mb-2">建議行動</h4>
+                            <p class="text-white/90">${data.action.trim()}</p>
+                        </div>
+                        <button onclick="exploreChakraFromGuidance('${data.dominant_chakra_id}')" class="assessment-btn w-full mt-4 text-white font-bold py-2 px-4 rounded-lg">深入探索 ${recommendedChakra ? recommendedChakra.name : ''}</button>`;
+                } else { throw new Error('API 回應無效'); }
+            } catch (error) {
+                console.error("Gemini API 呼叫失敗:", error);
+                guidanceResultContainer.innerHTML = `<p class="text-red-300 text-center">抱歉，目前無法生成指引，請稍後再試。</p><button onclick="closeGuidance()" class="assessment-btn w-full mt-4 text-white font-bold py-2 px-4 rounded-lg">關閉</button>`;
+            }
+        }
+        document.getElementById('submit-guidance-btn').addEventListener('click', getDailyGuidance);
+        window.exploreChakraFromGuidance = (chakraId) => {
+            closeGuidance();
+            displayChakraInfo(chakraId);
+            document.getElementById('chakra-info-container').scrollIntoView({ behavior: 'smooth' });
+        }
+        window.closeGuidance = closeGuidance;
+        
+        // --- Meditation Functions ---
+        const meditationModal = document.getElementById('meditation-modal');
+        const meditationResultContainer = document.getElementById('meditation-result');
+
+        function startMeditation(chakraId) {
+            activeChakra = chakraData.find(c => c.id === chakraId);
+            if (!activeChakra) return;
+
+            document.getElementById('meditation-title').textContent = `專注於 ${activeChakra.name} 的冥想`;
+            document.getElementById('meditation-content').style.display = 'block';
+            meditationResultContainer.innerHTML = '';
+            document.getElementById('meditation-focus').value = '';
+            meditationModal.classList.remove('hidden');
+        }
+
+        function closeMeditation() {
+            meditationModal.classList.add('hidden');
+        }
+        document.getElementById('close-meditation-btn').addEventListener('click', closeMeditation);
+        window.closeMeditation = closeMeditation;
+
+        async function getMeditationScript() {
+            if (!activeChakra) return;
+
+            const duration = document.getElementById('meditation-duration').value;
+            const focus = document.getElementById('meditation-focus').value.trim();
+
+            meditationResultContainer.innerHTML = '<div class="loader"></div>';
+            document.getElementById('meditation-content').style.display = 'none';
+
+            const systemPrompt = "您是一位專業的冥想導師與劇本作家。您的任務是根據使用者指定的脈輪、時間長度和特定焦點，撰寫一篇高品質、流暢且富有引導性的冥想導詞。請以JSON物件格式回覆，包含'title'和'script'兩個鍵。'script'應為一個包含多個物件的陣列，每個物件有'type'（intro, body, focus, outro）和'text'兩個鍵。導詞需溫和、正面，並在結構上符合所選的時間長度。若使用者未提供特定焦點，則'focus'部分的文字應為一段更深度的脈輪觀想。請使用繁體中文。";
+            const userQuery = `請為我撰寫一篇針對「${activeChakra.name}」的冥想導詞。冥想時間長度為「${duration}」。我希望的特別專注焦點是：「${focus || '無特定，請著重於該脈輪的通用平衡'}」。`;
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: { responseMimeType: "application/json", responseSchema: { type: "OBJECT", properties: { "title": { "type": "STRING" }, "script": { type: "ARRAY", items: { type: "OBJECT", properties: { "type": { "type": "STRING" }, "text": { "type": "STRING" } } } } }, required: ["title", "script"] }, },
+            };
+
+            try {
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) throw new Error(`API 請求失敗: ${response.status}`);
+                const result = await response.json();
+                const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (jsonText) {
+                    const data = JSON.parse(jsonText);
+                    let scriptHtml = `<h3 class="text-xl font-bold text-white mb-4 text-center">${data.title}</h3>`;
+                    data.script.forEach(part => {
+                        scriptHtml += `<div class="mb-3"><p class="text-white/90 whitespace-pre-line">${part.text}</p></div>`;
+                    });
+                    scriptHtml += `<button onclick="closeMeditation()" class="assessment-btn w-full mt-4 text-white font-bold py-2 px-4 rounded-lg">完成冥想</button>`;
+                    meditationResultContainer.innerHTML = scriptHtml;
+
+                } else { throw new Error('API 回應無效'); }
+
+            } catch (error) {
+                 console.error("Gemini API 呼叫失敗:", error);
+                meditationResultContainer.innerHTML = `<p class="text-red-300 text-center">抱歉，目前無法生成冥想導詞，請稍後再試。</p><button onclick="closeMeditation()" class="assessment-btn w-full mt-4 text-white font-bold py-2 px-4 rounded-lg">關閉</button>`;
+            }
+        }
+        document.getElementById('submit-meditation-btn').addEventListener('click', getMeditationScript);
+        
+        function initializeAppLogic() {
+            chakraData.forEach(chakra => {
+                const button = document.createElement('button');
+                button.dataset.chakraId = chakra.id;
+                button.className = `chakra-btn w-full text-center p-4 rounded-lg text-white font-bold text-lg ${chakra.color} hover:${chakra.color.slice(0,-3)}600`;
+                button.textContent = chakra.name;
+                button.onclick = () => displayChakraInfo(chakra.id);
+                buttonsContainer.appendChild(button);
+
+                const indicator = document.createElement('div');
+                indicator.dataset.chakraId = chakra.id;
+                indicator.className = `chakra-indicator ${chakra.color}`;
+                indicator.style.top = chakra.pos.top;
+                indicator.style.left = chakra.pos.left;
+                diagramContainer.appendChild(indicator);
+            });
+
+            if (chakraData.length > 0) {
+                displayChakraInfo(chakraData[0].id);
+            }
+        }
+    </script>
+</body>
+</html>
+
